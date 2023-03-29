@@ -40,45 +40,45 @@ export function richTextToHTML(arr, scoped = false) {
 }
 
 export function buildParagraph(el) {
-  if (el.children) {
+  if (el?.children) {
     return `<p>${richTextToHTML(el?.children)}</p>`
   }
-  return `<p>${el?.value}</p>`
 }
 
 export function buildHeading(el) {
-  if (el.children) {
-    return `<h${el.level}>${richTextToHTML(el.children)}</h${el.level}>`
+  if (el?.children) {
+    return `<h${el?.level}>${richTextToHTML(el?.children)}</h${el?.level}>`
   }
-  return `<h${el.level}>${el.value}</h${el.level}>`
 }
 
 export function buildList(el) {
-  if (el.children) {
-    return `<ul>${richTextToHTML(el.children)}</ul>`
+  if (el?.children) {
+    if (el?.listType === 'ordered') {
+      return `<ol>${richTextToHTML(el?.children)}</ol>`
+    } else {
+      return `<ul>${richTextToHTML(el?.children)}</ul>`
+    }
   }
-  return `<ul>${el.value}</ul>`
 }
 
 export function buildListItem(el) {
-  if (el.children) {
-    return `<li>${richTextToHTML(el.children)}</li>`
+  if (el?.children) {
+    return `<li>${richTextToHTML(el?.children)}</li>`
   }
-  return `<li>${el.value}</li>`
 }
 
 export function buildLink(el) {
-  return `<a href="${el.url}" title="${el.title}" target="${
-    el.target
-  }">${richTextToHTML(el.children)}</a>`
+  return `<a href="${el?.url}" title="${el?.title}" target="${
+    el?.target
+  }">${richTextToHTML(el?.children)}</a>`
 }
 
 export function buildText(el) {
-  if (el.bold) {
-    return `<b>${el.value}</b>`
+  if (el?.bold) {
+    return `<b>${el?.value}</b>`
   }
-  if (el.italic) {
-    return `<i>${el.value}</i>`
+  if (el?.italic) {
+    return `<i>${el?.value}</i>`
   }
-  return el.value
+  return el?.value
 }
