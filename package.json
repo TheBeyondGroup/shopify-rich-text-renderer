@@ -1,5 +1,5 @@
 {
-  "name": "shopify-rich-text-to-html",
+  "name": "@thebeyondgroup/shopify-rich-text-to-html",
   "version": "1.0.0",
   "description": "Convert Shopify's rich text field from a rich text object to HTML.",
   "main": "src/index.js",
