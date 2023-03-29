@@ -7,6 +7,7 @@
   "author": "Sean McQuaid",
   "license": "MIT",
   "private": false,
+  "type": "module",
   "scripts": {
     "build": "npx rollup -c",
     "docs": "npx jsdoc2md ./src/index.js > docs.md",
