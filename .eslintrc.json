@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-param-reassign": "off",
+    "no-prototype-builtins": "off",
+    "consistent-return": "off",
+    "func-names": "off",
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "lf"
+      }
+    ]
+  }
+}

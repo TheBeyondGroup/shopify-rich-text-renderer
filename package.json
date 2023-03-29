@@ -1,0 +1,57 @@
+{
+  "name": "shopify-rich-text-to-html",
+  "version": "1.0.0",
+  "description": "Convert Shopify's rich text field from a rich text object to HTML.",
+  "main": "src/index.js",
+  "repository": "https://github.com/TheBeyondGroup/shopify-rich-text-to-html",
+  "author": "Sean McQuaid",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "npx rollup -c",
+    "docs": "npx jsdoc2md ./src/index.js > docs.md",
+    "bump": "npx rollup -c && npm version patch --no-git-tag-version",
+    "format": "npx prettier --write src/index.js",
+    "format:check": "npx prettier -c src/index.js",
+    "lint": "npx eslint src/index.js",
+    "lint:fix": "npx eslint --fix src/index.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jsdoc-to-markdown": "^8.0.0",
+    "prettier": "^2.8.7",
+    "rollup": "^3.20.2",
+    "rollup-plugin-filesize": "^10.0.0",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "keywords": [
+    "convert",
+    "deserialize",
+    "deserializer",
+    "html serializer",
+    "html",
+    "javascript",
+    "js",
+    "metafield",
+    "Metaobject",
+    "rich text to html",
+    "rich text",
+    "serialize",
+    "serializer",
+    "shopify",
+    "utilities"
+  ],
+  "files": [
+    "readme.md",
+    "LICENSE",
+    "src",
+    "dist"
+  ],
+  "homepage": "https://github.com/TheBeyondGroup/shopify-rich-text-to-html#readme",
+  "bugs": {
+    "url": "https://github.com/TheBeyondGroup/shopify-rich-text-to-html/issues"
+  }
+}
