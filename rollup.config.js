@@ -7,9 +7,9 @@ export default [
     plugins: [terser(), filesize()],
     output: {
       sourcemap: true, //can pass 'inline' for inline source maps
-      file: 'dist/shopify-rich-to-html.min.js',
+      file: 'dist/shopify-rich-text-renderer.min.js',
       format: 'umd',
-      name: 'richTextToHTML',
+      name: 'convertSchemaToHtml',
     },
   },
   {
@@ -17,7 +17,7 @@ export default [
     plugins: [terser(), filesize()],
     output: {
       sourcemap: true, //can pass 'inline' for inline source maps
-      file: 'dist/shopify-rich-to-html.esm.min.js',
+      file: 'dist/shopify-rich-text-renderer.esm.min.js',
       format: 'es',
     },
   },

@@ -1,7 +1,7 @@
 {
-  "name": "@thebeyondgroup/shopify-rich-text-to-html",
-  "version": "1.0.0",
-  "description": "Convert Shopify's rich text field from a rich text object to HTML.",
+  "name": "@thebeyondgroup/shopify-rich-text-render",
+  "version": "0.0.1",
+  "description": "Convert Shopify's rich text field from a rich text schema to HTML.",
   "main": "src/index.js",
   "repository": "https://github.com/TheBeyondGroup/shopify-rich-text-to-html",
   "author": "Sean McQuaid",
@@ -51,8 +51,8 @@
     "src",
     "dist"
   ],
-  "homepage": "https://github.com/TheBeyondGroup/shopify-rich-text-to-html#readme",
+  "homepage": "https://github.com/TheBeyondGroup/shopify-rich-text-renderer#readme",
   "bugs": {
-    "url": "https://github.com/TheBeyondGroup/shopify-rich-text-to-html/issues"
+    "url": "https://github.com/TheBeyondGroup/shopify-rich-text-renderer/issues"
   }
 }

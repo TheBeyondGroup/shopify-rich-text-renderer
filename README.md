@@ -1,22 +1,22 @@
-## Shopify Rich Text to HTML
+## Shopify Rich Text Renderer
 
-This package converts the rich text returned by Shopify's Storefront API. In particular when dealing with the rich text field type for _MetaObjects_ and for _Metafields_.
+This package converts the rich text schema returned by Shopify's Storefront API to an HTML string. In particular, this package is useful when dealing with the rich text field type for _MetaObjects_ and _Metafields_.
 
 ### Usage
 
-- Install `yarn add @thebeyondgroup/shopify-rich-text-to-html`
-- Then import the `richTextToHTML()` function
+- Install `yarn add @thebeyondgroup/shopify-rich-text-renderer`
+- Then import the `convertSchemaToHtml()` function
 
 ```javascript
-import { richTextToHTML } from '@thebeyondgroup/shopify-rich-text-to-html'
+import { convertSchemaToHtml } from '@thebeyondgroup/shopify-rich-text-renderer'
 
 /*  this is an example of the rich text Shopify returns
-const richTextRes = {\"type\":\"root\",\"children: [{\"type\":\"heading\"
+const richTextResponse = {\"type\":\"root\",\"children: [{\"type\":\"heading\"
 \"level\":1,\"children\":[{\"type\":\"text\",\"value\":\
 "Test Heading\"}]},{\"listType\":\"ordered\",\"type\":\"list\",
 \"children\":[{\"type\":\"list-item\",\"children\":..." */
 
-richTextToHTML(richTextRes)
+convertSchemaToHtml(richTextResponse)
 ```
 
 ```html
@@ -32,7 +32,7 @@ To get scoped html pass either true or the name of a class to use in your scoped
 
 ```javascript
 // scoped html
-richTextToHTML(richTextRes, true)
+convertSchemaToHtml(richTextResponse, true)
 ```
 
 ```html
@@ -50,7 +50,7 @@ Or pass in custom class name to be used as the scoped class
 
 ```javascript
 //scoped w/ custom class name
-richTextToHTML(richTextRes, 'rich-text-wrap')
+convertSchemaToHtml(richTextResponse, 'rich-text-wrap')
 ```
 
 ```html
