@@ -1,14 +1,14 @@
-export function richTextToHTML(arr, scoped = false) {
+export function convertSchemaToHtml(arr, scoped = false) {
   let html = ``
   if (arr.type === 'root' && arr.children.length > 0) {
     if (scoped) {
       html += `
       <div class="${scoped === true ? `rte` : scoped}">
-        ${richTextToHTML(arr.children)}
+        ${convertSchemaToHtml(arr.children)}
       </div>
       `
     } else {
-      html += richTextToHTML(arr.children)
+      html += convertSchemaToHtml(arr.children)
     }
   } else {
     for (const el of arr) {
@@ -41,44 +41,44 @@ export function richTextToHTML(arr, scoped = false) {
 
 export function buildParagraph(el) {
   if (el?.children) {
-    return `<p>${richTextToHTML(el?.children)}</p>`
+    return `<p>${convertSchemaToHtml(el?.children)}</p>`
   }
 }
 
 export function buildHeading(el) {
   if (el?.children) {
-    return `<h${el?.level}>${richTextToHTML(el?.children)}</h${el?.level}>`
+    return `<h${el?.level}>${convertSchemaToHtml(el?.children)}</h${el?.level}>`
   }
 }
 
 export function buildList(el) {
   if (el?.children) {
     if (el?.listType === 'ordered') {
-      return `<ol>${richTextToHTML(el?.children)}</ol>`
+      return `<ol>${convertSchemaToHtml(el?.children)}</ol>`
     } else {
-      return `<ul>${richTextToHTML(el?.children)}</ul>`
+      return `<ul>${convertSchemaToHtml(el?.children)}</ul>`
     }
   }
 }
 
 export function buildListItem(el) {
   if (el?.children) {
-    return `<li>${richTextToHTML(el?.children)}</li>`
+    return `<li>${convertSchemaToHtml(el?.children)}</li>`
   }
 }
 
 export function buildLink(el) {
   return `<a href="${el?.url}" title="${el?.title}" target="${
     el?.target
-  }">${richTextToHTML(el?.children)}</a>`
+  }">${convertSchemaToHtml(el?.children)}</a>`
 }
 
 export function buildText(el) {
   if (el?.bold) {
-    return `<b>${el?.value}</b>`
+    return `<strong>${el?.value}</strong>`
   }
   if (el?.italic) {
-    return `<i>${el?.value}</i>`
+    return `<em>${el?.value}</em>`
   }
   return el?.value
 }
