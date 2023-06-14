@@ -73,7 +73,7 @@ export default Test(){
     <div
         className="html"
         dangerouslySetInnerHTML={{
-          __html: convertSchemaToHtml(JSON.parse(richTextResponse),
+          __html: convertSchemaToHtml(JSON.parse(richTextResponse)),
           }}
          />
       <div>
