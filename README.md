@@ -64,7 +64,7 @@ convertSchemaToHtml(JSON.parse(richTextResponse), 'rich-text-wrap')
 </div>
 ```
 
-Another more indepth example:
+Another more in depth example:
 ``` javascript
 export default Test(){
  const richTextResponse  = await getRichTextFromShopify()
