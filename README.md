@@ -16,7 +16,7 @@ const richTextResponse = {\"type\":\"root\",\"children: [{\"type\":\"heading\"
 "Test Heading\"}]},{\"listType\":\"ordered\",\"type\":\"list\",
 \"children\":[{\"type\":\"list-item\",\"children\":..." */
 
-convertSchemaToHtml(richTextResponse)
+convertSchemaToHtml(JSON.parse(richTextResponse))
 ```
 
 ```html
@@ -32,7 +32,7 @@ To get scoped html pass either true or the name of a class to use in your scoped
 
 ```javascript
 // scoped html
-convertSchemaToHtml(richTextResponse, true)
+convertSchemaToHtml(JSON.parse(richTextResponse), true)
 ```
 
 ```html
@@ -50,7 +50,7 @@ Or pass in custom class name to be used as the scoped class
 
 ```javascript
 //scoped w/ custom class name
-convertSchemaToHtml(richTextResponse, 'rich-text-wrap')
+convertSchemaToHtml(JSON.parse(richTextResponse), 'rich-text-wrap')
 ```
 
 ```html
@@ -63,3 +63,22 @@ convertSchemaToHtml(richTextResponse, 'rich-text-wrap')
   ...
 </div>
 ```
+
+Another more indepth example:
+``` javascript
+export default Test(){
+ const richTextResponse  = await getRichTextFromShopify()
+  return (
+   <>
+    <div
+        className="html"
+        dangerouslySetInnerHTML={{
+          __html: convertSchemaToHtml(JSON.parse(richTextResponse),
+          }}
+         />
+      <div>
+   </>
+ )
+}
+```
+I added a working [JSFiddile Demo](https://jsfiddle.net/d5Lhg9c6/86/) that should help show how it works.
