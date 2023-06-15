@@ -1,4 +1,7 @@
 export function convertSchemaToHtml(arr, scoped = false) {
+  if (typeof arr === 'string' || arr instanceof String) {
+    arr = JSON.parse(arr)
+  }
   let html = ``
   if (arr.type === 'root' && arr.children.length > 0) {
     if (scoped) {
