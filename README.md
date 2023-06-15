@@ -83,4 +83,4 @@ export default RenderedHTML(){
 }
 ```
 
-I added a working [JSFiddile Demo](https://jsfiddle.net/9bh1mgc8/) that should help show how it works.
+I added a working [JSFiddle Demo](https://jsfiddle.net/9bh1mgc8/) that should help show how it works.
