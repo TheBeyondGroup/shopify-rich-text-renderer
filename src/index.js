@@ -1,20 +1,20 @@
-export function convertSchemaToHtml(arr, scoped = false) {
-  if (typeof arr === 'string' || arr instanceof String) {
-    arr = JSON.parse(arr)
+export function convertSchemaToHtml(schema, scoped = false) {
+  if (typeof schema === 'string' || schema instanceof String) {
+    schema = JSON.parse(schema)
   }
   let html = ``
-  if (arr.type === 'root' && arr.children.length > 0) {
+  if (schema.type === 'root' && schema.children.length > 0) {
     if (scoped) {
       html += `
       <div class="${scoped === true ? `rte` : scoped}">
-        ${convertSchemaToHtml(arr.children)}
+        ${convertSchemaToHtml(schema.children)}
       </div>
       `
     } else {
-      html += convertSchemaToHtml(arr.children)
+      html += convertSchemaToHtml(schema.children)
     }
   } else {
-    for (const el of arr) {
+    for (const el of schema) {
       switch (el.type) {
         case 'paragraph':
           html += buildParagraph(el)
