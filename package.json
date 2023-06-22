@@ -1,6 +1,6 @@
 {
   "name": "@thebeyondgroup/shopify-rich-text-renderer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Convert Shopify's rich text field from a rich text schema to HTML.",
   "main": "src/index.js",
   "repository": "https://github.com/TheBeyondGroup/shopify-rich-text-renderer.git",
@@ -11,6 +11,7 @@
   "scripts": {
     "build": "npx rollup -c",
     "docs": "npx jsdoc2md ./src/index.js > docs.md",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "bump": "npx rollup -c && npm version patch --no-git-tag-version",
     "format": "npx prettier --write src/index.js",
     "format:check": "npx prettier -c src/index.js",
@@ -22,6 +23,8 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "jsdoc-to-markdown": "^8.0.0",
     "prettier": "^2.8.7",
     "rollup": "^3.20.2",
