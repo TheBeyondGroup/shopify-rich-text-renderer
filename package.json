@@ -1,10 +1,10 @@
 {
   "name": "@thebeyondgroup/shopify-rich-text-renderer",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Convert Shopify's rich text field from a rich text schema to HTML.",
   "main": "src/index.js",
   "repository": "https://github.com/TheBeyondGroup/shopify-rich-text-renderer.git",
-  "author": "Sean McQuaid",
+  "author": "Sean ",
   "license": "MIT",
   "private": false,
   "type": "module",
