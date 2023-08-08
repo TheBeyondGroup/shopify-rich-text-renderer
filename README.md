@@ -1,6 +1,6 @@
 ## Shopify Rich Text Renderer
 
-This package converts the rich text schema returned by Shopify's Storefront API to an HTML string. In particular, this package is useful when dealing with the rich text field type for _MetaObjects_ and _Metafields_.
+This package converts the rich text schema returned by Shopify's Storefront API to an HTML string. In particular, this package is useful when dealing with the rich text field type for _MetaObjects_ and _Metafields_ when using the Storefront API.
 
 ### Usage
 
@@ -28,7 +28,7 @@ convertSchemaToHtml(richTextResponse)
 ...
 ```
 
-To get scoped html pass either true or the name of a class to use in your scoped css selectors:
+To get scoped HTML pass either true or the name of a class(es) to use in your scoped css selectors. This allows for the rich text HTML to be easily styled.
 
 ```javascript
 // scoped html
@@ -46,7 +46,7 @@ convertSchemaToHtml(richTextResponse, true)
 </div>
 ```
 
-Or pass in custom class name to be used as the scoped class
+You can also pass in a custom class name to be used as the scoped class instead of the default `rte`
 
 ```javascript
 //scoped w/ custom class name
@@ -64,7 +64,7 @@ convertSchemaToHtml(richTextResponse, 'rich-text-wrap')
 </div>
 ```
 
-Another more in depth example:
+React/Hydrogen example:
 
 ```javascript
 export default RenderedHTML(){
@@ -83,4 +83,4 @@ export default RenderedHTML(){
 }
 ```
 
-I added a working [JSFiddle Demo](https://jsfiddle.net/68c3wrvp/4/) that should help show how it works.
+Here is a [JSFiddle Demo](https://jsfiddle.net/psmzrojd/) that shows a working example.
