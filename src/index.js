@@ -77,11 +77,12 @@ export function buildLink(el) {
 }
 
 export function buildText(el) {
+  const value = el?.value?.replace(/\n/g, '<br>')
   if (el?.bold) {
-    return `<strong>${el?.value}</strong>`
+    return `<strong>${value}</strong>`
   }
   if (el?.italic) {
-    return `<em>${el?.value}</em>`
+    return `<em>${value}</em>`
   }
-  return el?.value
+  return value
 }
