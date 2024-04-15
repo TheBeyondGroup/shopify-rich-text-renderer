@@ -13,9 +13,7 @@ test('check converting string schema to HTML', () => {
   expect(document.querySelector('h1').textContent).toBe('Heading 1')
   expect(document.querySelector('h4').textContent).toBe('Heading 4')
   expect(document.querySelector('ul>li').textContent).toBe('item1')
-  expect(document.querySelector('p em').textContent).toBe(
-    'This is italicized text and '
-  )
+  expect(document.querySelector('p em').textContent).toBe('This is italicized text and ')
 })
 
 test('check converting JSON object schema to HTML', () => {
@@ -30,9 +28,7 @@ test('check converting JSON object schema to HTML', () => {
             url: 'https://example.com',
             title: 'Link to example.com',
             type: 'link',
-            children: [
-              { type: 'text', value: 'a bolded hyperlink', bold: true },
-            ],
+            children: [{ type: 'text', value: 'a bolded hyperlink', bold: true }],
           },
           { type: 'text', value: '' },
         ],
@@ -77,7 +73,5 @@ test('check converting JSON object schema to HTML', () => {
   expect(document.querySelector('h1').textContent).toBe('Heading 1')
   expect(document.querySelector('h4').textContent).toBe('Heading 4')
   expect(document.querySelector('ul>li').textContent).toBe('item1')
-  expect(document.querySelector('p em').textContent).toBe(
-    'This is italicized text and '
-  )
+  expect(document.querySelector('p em').textContent).toBe('This is italicized text and ')
 })
