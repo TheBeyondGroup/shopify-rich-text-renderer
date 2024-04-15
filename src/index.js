@@ -1,7 +1,6 @@
 export function convertSchemaToHtml(schema, options = null) {
-  const { scoped, classes } = options ?? {}
+  var { scoped, classes } = options ?? {}
   let html = ''
-
   if (typeof schema === 'string' || schema instanceof String) {
     schema = JSON.parse(schema)
   }
@@ -10,11 +9,11 @@ export function convertSchemaToHtml(schema, options = null) {
     if (scoped) {
       html += `
       <div class="${scoped === true ? `rte` : scoped}">
-        ${convertSchemaToHtml(schema.children)}
+        ${(convertSchemaToHtml(schema.children), options)}
       </div>
       `
     } else {
-      html += convertSchemaToHtml(schema.children)
+      html += convertSchemaToHtml(schema.children, options)
     }
   } else {
     for (const el of schema) {
@@ -47,7 +46,7 @@ export function convertSchemaToHtml(schema, options = null) {
 
 function outputClasses(tag, classes) {
   if (classes && classes[tag]) {
-    return `class="${classes[tag]}`
+    return ` class="${classes[tag]}"`
   } else {
     return ''
   }
@@ -65,25 +64,25 @@ function outputAttributes(attributes) {
 }
 
 function createElement(tag, classes, content, attributes = null) {
-  return `<${tag} ${outputClasses(tag, classes)} ${outputAttributes(attributes)}>${content}</${tag}>`
+  return `<${tag}${outputClasses(tag, classes)} ${outputAttributes(attributes)}>${content}</${tag}>`
 }
 
 export function buildParagraph(el, classes) {
-  return createElement('p', classes, convertSchemaToHtml(el?.children))
+  return createElement('p', classes, convertSchemaToHtml(el?.children, { classes }))
 }
 
 export function buildHeading(el, classes) {
   const tag = `h${el?.level}`
-  return createElement(tag, classes, convertSchemaToHtml(el?.children))
+  return createElement(tag, classes, convertSchemaToHtml(el?.children, { classes }))
 }
 
 export function buildList(el, classes) {
   const tag = el?.listType === 'ordered' ? 'ol' : 'ul'
-  return createElement(tag, classes, convertSchemaToHtml(el?.children))
+  return createElement(tag, classes, convertSchemaToHtml(el?.children, { classes }))
 }
 
 export function buildListItem(el, classes) {
-  return createElement('li', classes, convertSchemaToHtml(el?.children))
+  return createElement('li', classes, convertSchemaToHtml(el?.children, { classes }))
 }
 
 export function buildLink(el, classes) {
@@ -92,7 +91,7 @@ export function buildLink(el, classes) {
     title: el?.title,
     target: el?.target,
   }
-  return createElement('a', classes, convertSchemaToHtml(el?.children), attributes)
+  return createElement('a', classes, convertSchemaToHtml(el?.children, { classes }), attributes)
 }
 
 export function buildText(el, classes) {
