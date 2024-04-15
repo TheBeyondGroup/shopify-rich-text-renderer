@@ -45,90 +45,62 @@ export function convertSchemaToHtml(schema, options = null) {
   return html
 }
 
-export function buildParagraph(el, classes) {
-  if (el?.children && classes?.p) {
-    return `<p class="${classes.p}">${convertSchemaToHtml(el?.children)}</p>`
-  } else if (el?.children) {
-    return `<p>${convertSchemaToHtml(el?.children)}</p>`
+function outputClasses(tag, classes) {
+  if (classes && classes[tag]) {
+    return `class="${classes[tag]}`
+  } else {
+    return ''
   }
+}
+
+function outputAttributes(attributes) {
+  if (!attributes) return ''
+  return Object.keys(attributes)
+    .map(key => {
+      if (attributes[key]) {
+        return `${key}="${attributes[key]}"`
+      }
+    })
+    .join(' ')
+}
+
+function createElement(tag, classes, content, attributes = null) {
+  return `<${tag} ${outputClasses(tag, classes)} ${outputAttributes(attributes)}>${content}</${tag}>`
+}
+
+export function buildParagraph(el, classes) {
+  return createElement('p', classes, convertSchemaToHtml(el?.children))
 }
 
 export function buildHeading(el, classes) {
-  const key = `h${el?.level}`
-  if (el?.children && classes && classes[key]) {
-    return `<h${el?.level} class="${classes[key]}">
-      ${convertSchemaToHtml(el?.children)}
-    </h${el?.level}>`
-  } else if (el?.children) {
-    return `<h${el?.level}>
-      ${convertSchemaToHtml(el?.children)}
-    </h${el?.level}>`
-  }
+  const tag = `h${el?.level}`
+  return createElement(tag, classes, convertSchemaToHtml(el?.children))
 }
 
 export function buildList(el, classes) {
-  if (el?.children) {
-    if (el?.listType === 'ordered') {
-      if (classes?.ol) {
-        return `<ol class="${classes.ol}">
-         ${convertSchemaToHtml(el?.children)}
-        </ol>`
-      } else {
-        return `<ol>${convertSchemaToHtml(el?.children)}</ol>`
-      }
-    } else {
-      if (classes?.ul) {
-        return `<ul class="${classes.ul}">${convertSchemaToHtml(
-          el?.children
-        )}</ul>`
-      } else {
-        return `<ul>${convertSchemaToHtml(el?.children)}</ul>`
-      }
-    }
-  }
+  const tag = el?.listType === 'ordered' ? 'ol' : 'ul'
+  return createElement(tag, classes, convertSchemaToHtml(el?.children))
 }
 
 export function buildListItem(el, classes) {
-  if (el?.children && classes?.li) {
-    return `<li class="${classes.li}">${convertSchemaToHtml(el?.children)}</li>`
-  } else if (el?.children) {
-    return `<li>${convertSchemaToHtml(el?.children)}</li>`
-  }
+  return createElement('li', classes, convertSchemaToHtml(el?.children))
 }
 
 export function buildLink(el, classes) {
-  if (classes?.a) {
-    return `
-    <a href="${el?.url}" 
-       class="${classes.a}" 
-       title="${el?.title}" 
-       target="${el?.target}">
-       ${convertSchemaToHtml(el?.children)}
-    </a>`
-  } else {
-    return `
-    <a href="${el?.url}" 
-       title="${el?.title}" 
-       target="${el?.target}">
-       ${convertSchemaToHtml(el?.children)}
-    </a>`
+  const attributes = {
+    href: el?.url,
+    title: el?.title,
+    target: el?.target,
   }
+  return createElement('a', classes, convertSchemaToHtml(el?.children), attributes)
 }
 
 export function buildText(el, classes) {
   if (el?.bold) {
-    if (classes?.bold) {
-      return `<strong  class="${classes?.bold}">${el?.value}</strong>`
-    } else {
-      return `<strong>${el?.value}</strong>`
-    }
+    return createElement('strong', classes, el?.value)
+  } else if (el?.italic) {
+    return createElement('em', classes, el?.value)
+  } else {
+    return el?.value
   }
-  if (el?.italic) {
-    if (classes?.italic) {
-      return `<em class="${classes.italic}">${el?.value}</em>`
-    } else {
-      return `<em>${el?.value}</em>`
-    }
-  }
-  return el?.value
 }
