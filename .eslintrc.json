@@ -18,7 +18,8 @@
     "prettier/prettier": [
       "warn",
       {
-        "endOfLine": "lf"
+        "endOfLine": "lf",
+        "printWidth": 120
       }
     ]
   }
