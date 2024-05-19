@@ -1,5 +1,5 @@
 export function convertSchemaToHtml(schema, options = null) {
-  var { scoped, classes } = options ?? {}
+  const { scoped, classes } = options ?? {}
   let html = ''
   if (typeof schema === 'string' || schema instanceof String) {
     schema = JSON.parse(schema)
@@ -44,27 +44,28 @@ export function convertSchemaToHtml(schema, options = null) {
   return html
 }
 
-function outputClasses(tag, classes) {
+function getClass(tag, classes) {
   if (classes && classes[tag]) {
-    return ` class="${classes[tag]}"`
+    return classes[tag]
   } else {
-    return ''
+    return null
   }
 }
 
 function outputAttributes(attributes) {
-  if (!attributes) return ''
+  if (!attributes && attributes?.class) return ''
   return Object.keys(attributes)
     .map(key => {
       if (attributes[key]) {
-        return `${key}="${attributes[key]}"`
+        return ` ${key}="${attributes[key]}"`
       }
     })
-    .join(' ')
+    .join('')
 }
 
-function createElement(tag, classes, content, attributes = null) {
-  return `<${tag}${outputClasses(tag, classes)} ${outputAttributes(attributes)}>${content}</${tag}>`
+function createElement(tag, classes, content, attributes = {}) {
+  attributes = { ...attributes, class: getClass(tag, classes) }
+  return `<${tag}${outputAttributes(attributes)}>${content}</${tag}>`
 }
 
 export function buildParagraph(el, classes) {
