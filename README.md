@@ -81,8 +81,8 @@ const options = {
     ul: 'my-3 ml-3 flex flex-col gap-y-2', // unordered list classes
     li: 'text-sm md:text-base', // list item classes
     a: 'underline text-blue-500 hover:text-blue-700', // anchor/link classes
-    bold: 'font-medium', // bold/strong classes
-    italic: 'font-italic', // italic/em classes
+    strong: 'font-medium', // bold/strong classes
+    em: 'font-italic', // italic/em classes
   },
 }
 
@@ -95,12 +95,7 @@ convertSchemaToHtml(richTextResponse, options)
 <h1 class="mb-4 text-2xl md:text-4xl">Groceries</h1>
 <p class="mt-3 text-lg">
   Here is my shopping list for various fruit to buy at
-  <a
-    href="https://grocerystore.com"
-    class="underline text-blue-500 hover:text-blue-700"
-  >
-    The Grocery Store
-  </a>
+  <a href="https://grocerystore.com" class="underline text-blue-500 hover:text-blue-700"> The Grocery Store </a>
 </p>
 <ol class="my-3 ml-3 flex flex-col gap-y-2">
   <li class="text-sm md:text-base">apples</li>
