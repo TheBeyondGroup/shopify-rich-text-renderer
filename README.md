@@ -64,11 +64,12 @@ convertSchemaToHtml(richTextResponse, { scoped: 'rich-text-wrap' })
 </div>
 ```
 
-If you want to be more specific or are using something like Tailwind CSS you can pass a string of classes to be used with specific HTML elements to the `classes` property of the `options` parameter (options.classes). This makes it easy to write your own wrapper class to apply a default classlist to various elements.
+If you want to be more specific or are using something like Tailwind CSS you can pass a string of classes to be used with specific HTML elements to the `classes` property of the `options` parameter (options.classes). This makes it easy to write your own wrapper class to apply a default classlist to various elements. There is also an option to convert new line character's to `<br/>` ( You can create new lines using `shift + space` in Shopify's rich text editor).
 
 ```javascript
 const options = {
   scoped: false,
+  newLineToBreak: true, // convert new line character to <br/>
   classes: {
     p: 'mt-3 text-lg', // paragraph classes
     h1: 'mb-4 text-2xl md:text-4xl', // heading1 classes

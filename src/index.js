@@ -1,5 +1,5 @@
 export function convertSchemaToHtml(schema, options = null) {
-  const { scoped, classes } = options ?? {}
+  const { scoped, classes, newLineToBreak } = options ?? {}
   let html = ''
   if (typeof schema === 'string' || schema instanceof String) {
     schema = JSON.parse(schema)
@@ -34,7 +34,7 @@ export function convertSchemaToHtml(schema, options = null) {
           html += buildLink(el, classes)
           break
         case 'text':
-          html += buildText(el, classes)
+          html += buildText(el, classes, newLineToBreak)
           break
         default:
           break
@@ -95,12 +95,12 @@ export function buildLink(el, classes) {
   return createElement('a', classes, convertSchemaToHtml(el?.children, { classes }), attributes)
 }
 
-export function buildText(el, classes) {
+export function buildText(el, classes, newLineToBreak) {
   if (el?.bold) {
     return createElement('strong', classes, el?.value)
   } else if (el?.italic) {
     return createElement('em', classes, el?.value)
   } else {
-    return el?.value
+    return newLineToBreak ? el?.value?.replace(/\n/g, '<br/>') : el?.value
   }
 }
