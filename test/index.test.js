@@ -37,7 +37,12 @@ test('check converting JSON object schema to HTML', () => {
       },
       {
         type: 'paragraph',
-        children: [{ type: 'text', value: 'This is test.' }],
+        children: [
+          {
+            type: 'text',
+            value: 'This is test. New\nlines\nare supported.',
+          },
+        ],
       },
       {
         type: 'heading',
@@ -77,6 +82,7 @@ test('check converting JSON object schema to HTML', () => {
   expect(document.querySelector('h4').textContent).toBe('Heading 4')
   expect(document.querySelector('ul>li').textContent).toBe('item1')
   expect(document.querySelector('p em').textContent).toBe('This is italicized text and ')
+  expect(document.querySelector('p:nth-child(2)').innerHTML).toBe('This is test. New<br/>lines<br/>are supported.')
 })
 
 test('check applied classes to elements', () => {
