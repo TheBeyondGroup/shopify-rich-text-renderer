@@ -74,7 +74,7 @@ test('check converting JSON object schema to HTML', () => {
     ],
   }
 
-  const html = convertSchemaToHtml(resObject)
+  const html = convertSchemaToHtml(resObject, { newLineToBreak: true })
   document.body.innerHTML = html
   expect(document.querySelector('a').getAttribute('href')).toBe('https://example.com')
   expect(document.querySelector('a').getAttribute('title')).toBe('Link to example.com')
@@ -82,7 +82,7 @@ test('check converting JSON object schema to HTML', () => {
   expect(document.querySelector('h4').textContent).toBe('Heading 4')
   expect(document.querySelector('ul>li').textContent).toBe('item1')
   expect(document.querySelector('p em').textContent).toBe('This is italicized text and ')
-  expect(document.querySelector('p:nth-child(2)').innerHTML).toBe('This is test. New<br/>lines<br/>are supported.')
+  expect(document.querySelector('p:nth-child(2)').innerHTML).toBe('This is test. New<br>lines<br>are supported.')
 })
 
 test('check applied classes to elements', () => {
