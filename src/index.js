@@ -54,10 +54,11 @@ function getClass(tag, classes) {
 
 function outputAttributes(attributes) {
   if (!attributes && attributes?.class) return ''
+  const ATTRIBUTE_SEPARATOR = ' '
   return Object.keys(attributes)
     .map(key => {
       if (attributes[key]) {
-        return ` ${key}="${attributes[key]}"`
+        return `${ATTRIBUTE_SEPARATOR}${key}="${attributes[key]}"`
       }
     })
     .join('')
