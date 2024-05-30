@@ -1,5 +1,5 @@
-export function convertSchemaToHtml(schema, options = null) {
-  const { scoped, classes, newLineToBreak } = options ?? {}
+export function convertSchemaToHtml(schema, options = {}) {
+  const { scoped } = options
   let html = ''
   if (typeof schema === 'string' || schema instanceof String) {
     schema = JSON.parse(schema)
@@ -19,22 +19,22 @@ export function convertSchemaToHtml(schema, options = null) {
     for (const el of schema) {
       switch (el.type) {
         case 'paragraph':
-          html += buildParagraph(el, classes)
+          html += buildParagraph(el, options)
           break
         case 'heading':
-          html += buildHeading(el, classes)
+          html += buildHeading(el, options)
           break
         case 'list':
-          html += buildList(el, classes)
+          html += buildList(el, options)
           break
         case 'list-item':
-          html += buildListItem(el, classes)
+          html += buildListItem(el, options)
           break
         case 'link':
-          html += buildLink(el, classes)
+          html += buildLink(el, options)
           break
         case 'text':
-          html += buildText(el, classes, newLineToBreak)
+          html += buildText(el, options)
           break
         default:
           break
@@ -69,39 +69,45 @@ function createElement(tag, classes, content, attributes = {}) {
   return `<${tag}${outputAttributes(attributes)}>${content}</${tag}>`
 }
 
-export function buildParagraph(el, classes) {
-  return createElement('p', classes, convertSchemaToHtml(el?.children, { classes }))
+export function buildParagraph(el, options) {
+  const { classes } = options
+  return createElement('p', classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildHeading(el, classes) {
+export function buildHeading(el, options) {
+  const { classes } = options
   const tag = `h${el?.level}`
-  return createElement(tag, classes, convertSchemaToHtml(el?.children, { classes }))
+  return createElement(tag, classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildList(el, classes) {
+export function buildList(el, options) {
+  const { classes } = options
   const tag = el?.listType === 'ordered' ? 'ol' : 'ul'
-  return createElement(tag, classes, convertSchemaToHtml(el?.children, { classes }))
+  return createElement(tag, classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildListItem(el, classes) {
-  return createElement('li', classes, convertSchemaToHtml(el?.children, { classes }))
+export function buildListItem(el, options) {
+  const { classes } = options
+  return createElement('li', classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildLink(el, classes) {
+export function buildLink(el, options) {
+  const { classes } = options
   const attributes = {
     href: el?.url,
     title: el?.title,
     target: el?.target,
   }
-  return createElement('a', classes, convertSchemaToHtml(el?.children, { classes }), attributes)
+  return createElement('a', classes, convertSchemaToHtml(el?.children, options), attributes)
 }
 
-export function buildText(el, classes, newLineToBreak) {
+export function buildText(el, options) {
+  const { classes, newLineToBreak } = options
   if (el?.bold) {
     return createElement('strong', classes, el?.value)
   } else if (el?.italic) {
     return createElement('em', classes, el?.value)
   } else {
-    return newLineToBreak ? el?.value?.replace(/\n/g, '<br/>') : el?.value
+    return newLineToBreak ? el?.value?.replace(/\n/g, '<br>') : el?.value
   }
 }
