@@ -125,4 +125,4 @@ export default RenderedHTML(){
 }
 ```
 
-Here is a [JSFiddle Demo](https://jsfiddle.net/psmzrojd/) that shows a working example.
+Here is a [JSFiddle Demo](https://jsfiddle.net/r2d4wsna/) that shows a working example.
