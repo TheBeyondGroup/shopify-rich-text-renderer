@@ -9,7 +9,7 @@ export function convertSchemaToHtml(schema, options = {}) {
     if (scoped) {
       html += `
       <div class="${scoped === true ? `rte` : scoped}">
-        ${(convertSchemaToHtml(schema.children), options)}
+        ${convertSchemaToHtml(schema.children, options)}
       </div>
       `
     } else {
