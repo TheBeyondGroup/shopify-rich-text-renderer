@@ -28,7 +28,7 @@ convertSchemaToHtml(richTextResponse)
 ...
 ```
 
-To get scoped HTML pass either true or the name of a class(es) to use in your scoped css selectors in the `scoped` property of the `options` parameter (options.scoped). This allows for the rich text HTML to be easily styled.
+To get scoped HTML pass either true or the name of a class(es) to use in your scoped css selectors in the `scoped` property of the `options` parameter (options.scoped). This allows for the rich text HTML to be easily styled. _Note: You can also pass a scoped class name or_ `true`_ (to use default scoped class) instead of the options object, i.e._ `convertSchemaToHtml(richTextResponse, 'rich-text-wrap')`.
 
 ```javascript
 // scoped html
@@ -46,7 +46,7 @@ convertSchemaToHtml(richTextResponse, { scoped: true })
 </div>
 ```
 
-You can also pass in a custom class name to be used as the scoped class instead of the default `rte`
+You can also pass in a custom class name to be used as the scoped class instead of the default `rte`.
 
 ```javascript
 //scoped w/ custom class name

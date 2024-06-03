@@ -1,8 +1,12 @@
 export function convertSchemaToHtml(schema, options = {}) {
-  const { scoped } = options
+  let { scoped } = options
   let html = ''
   if (typeof schema === 'string' || schema instanceof String) {
     schema = JSON.parse(schema)
+  }
+
+  if (typeof options === 'string' || options instanceof String || options === true) {
+    scoped = options
   }
 
   if (schema.type === 'root' && schema.children.length > 0) {
