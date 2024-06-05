@@ -1,4 +1,4 @@
-//add a random comment
+//add a random comment & more comments
 export function convertSchemaToHtml(schema, options = {}) {
   let { scoped } = options
   let html = ''
