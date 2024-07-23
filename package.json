@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "type": "module",
+  "typings": "index.d.ts",
   "scripts": {
     "build": "npx rollup -c",
     "docs": "npx jsdoc2md ./src/index.js > docs.md",
