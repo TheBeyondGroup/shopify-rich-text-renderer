@@ -1,10 +1,14 @@
 {
   "name": "@thebeyondgroup/shopify-rich-text-renderer",
   "version": "2.0.1",
-  "description": "Convert Shopify's rich text field from a rich text schema to HTML.",
+  "description": "Convert Shopify's Metafields/Metaobjects rich text type from a rich text AST/schema to HTML. Works great with hydrogen/headless & regular storefronts.",
   "main": "src/index.js",
   "repository": "https://github.com/TheBeyondGroup/shopify-rich-text-renderer.git",
-  "author": "Sean ",
+  "author": {
+    "name": "Sean McQuaid",
+    "email": "sean@decrypteddesign.com",
+    "github": "mcqua007"
+  },
   "license": "MIT",
   "private": false,
   "type": "module",
@@ -34,7 +38,9 @@
     "rollup-plugin-terser": "^7.0.2"
   },
   "keywords": [
+    "AST",
     "convert",
+    "CSS",
     "deserialize",
     "deserializer",
     "html serializer",
@@ -45,10 +51,18 @@
     "Metaobject",
     "rich text to html",
     "rich text",
+    "react",
+    "hydrogen",
     "renderer",
     "serialize",
     "serializer",
+    "schema",
     "shopify",
+    "typescript",
+    "tailwind",
+    "typings",
+    "type definitions",
+    "utility",
     "utilities"
   ],
   "files": [
