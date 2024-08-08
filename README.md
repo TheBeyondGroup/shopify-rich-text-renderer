@@ -114,7 +114,7 @@ import React, { useEffect, useState } from 'react'
 // Default options for the HTML conversion, using Tailwind CSS classes
 const defaultOptions = {
   scoped: false,
-  newLineToBreak: true, // convert new line character to <br/>
+  newLineToBreak: false, // convert new line character to <br/>
   classes: {
     p: 'mt-3 text-lg', // paragraph classes
     h1: 'mb-4 text-2xl md:text-4xl', // heading1 classes
@@ -192,6 +192,58 @@ export default function RichTextToHTML({ schema, options, apiRoute }) {
     </>
   )
 }
+```
+
+Example of the react RichTextToHTML component in use
+
+```javascript
+// App.jsx
+import React from 'react'
+import RichTextToHTML from './RichTextToHTML'
+
+// Custom schema for/mock rich text metaobject get request
+const schema = {
+  type: 'root',
+  children: [
+    {
+      type: 'heading',
+      level: 2,
+      children: [{ type: 'text', value: 'Custom Heading 2' }],
+    },
+    {
+      type: 'paragraph',
+      children: [{ type: 'text', value: 'This is a custom paragraph.' }],
+    },
+  ],
+}
+
+// Custom options for demonstration of overriding defaults.
+// Note: you probably wouldn't need to set the scoped class name & apply unique classes per element
+const customOptions = {
+  scoped: 'custom-scope',
+  classes: {
+    p: 'text-lg text-slate-800 my-2',
+    h2: 'text-2xl md:text-4xl font-semibold leading-none tracking-wide mb-2',
+  },
+  newLineToBreak: true,
+}
+
+// Main React App Component
+const App = () => {
+  return (
+    <div className="container flex flex-col gap-4 mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">Shopify Storefront</h1>
+      <RichTextToHTML schema={schema} options={customOptions} />
+      {/* Example without being passed a schema to trigger a fetch request from shopify. **Passing the api route doesn't really make sense & is for demonstration purposes only */}
+      <RichTextToHTML
+        options={customOptions}
+        apiRoute="/api/metaobjects/richtext/user-profile?api-key=tH3BeY0ndGr0vp"
+      />
+    </div>
+  )
+}
+
+export default App
 ```
 
 Here is a [JSFiddle Demo](https://jsfiddle.net/r2d4wsna/) that shows a working example.
