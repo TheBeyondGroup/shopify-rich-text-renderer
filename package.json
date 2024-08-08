@@ -20,6 +20,7 @@
     "lint:fix": "npx eslint --fix src/index.js"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.24.7",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
