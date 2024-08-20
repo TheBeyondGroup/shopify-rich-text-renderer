@@ -8,9 +8,9 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "typings": "index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "npx rollup -c",
+    "build": "npx rollup -c && cp index.d.ts dist/index.d.ts",
     "docs": "npx jsdoc2md ./src/index.js > docs.md",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "bump": "npx rollup -c && npm version patch --no-git-tag-version",
