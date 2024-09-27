@@ -103,26 +103,147 @@ convertSchemaToHtml(richTextResponse, options)
   <li class="text-sm md:text-base">oranges</li>
   <li class="text-sm md:text-base">bananas</li>
 </ol>
-...
 ```
 
-React/Hydrogen example:
+React/Hydrogen Component Example
 
 ```javascript
-export default RenderedHTML(){
- const richTextResponse  = await getRichTextFromShopify()
-  return (
-   <>
-    <div
-        className="html"
-        dangerouslySetInnerHTML={{
-          __html: convertSchemaToHtml(richTextResponse),
-          }}
-         />
-      <div>
-   </>
- )
+import { convertSchemaToHtml } from '@thebeyondgroup/shopify-rich-text-renderer'
+import React, { useEffect, useState } from 'react'
+
+// Default options for the HTML conversion, using Tailwind CSS classes
+const defaultOptions = {
+  scoped: false,
+  newLineToBreak: false, // convert new line character to <br/>
+  classes: {
+    p: 'mt-3 text-lg', // paragraph classes
+    h1: 'mb-4 text-2xl md:text-4xl', // heading1 classes
+    h2: 'mb-4 text-xl md:text-3xl', // heading2 classes
+    h3: 'mb-3 text-lg md:text-2xl', // heading3 classes
+    h4: 'mb-3 text-base md:text-lg', // heading4 classes
+    h5: 'mb-2.5 text-sm md:text-base', // heading5 classes
+    h6: 'mb-2 text-xs md:text-sm', // heading6 classes
+    ol: 'my-3 ml-3 flex flex-col gap-y-2', // order list classes
+    ul: 'my-3 ml-3 flex flex-col gap-y-2', // unordered list classes
+    li: 'text-sm md:text-base', // list item classes
+    a: 'underline text-blue-500 hover:text-blue-700', // anchor/link classes
+    strong: 'font-medium', // bold/strong classes
+    em: 'font-italic', // italic/em classes
+  },
 }
+
+// schema for demonstration
+const schema = {
+  type: 'root',
+  children: [
+    {
+      type: 'heading',
+      level: 1,
+      children: [{ type: 'text', value: 'Heading 1' }],
+    },
+    {
+      type: 'paragraph',
+      children: [{ type: 'text', value: 'This is a paragraph.' }],
+    },
+    {
+      type: 'list',
+      listType: 'unordered',
+      children: [
+        { type: 'list-item', children: [{ type: 'text', value: 'Item 1' }] },
+        { type: 'list-item', children: [{ type: 'text', value: 'Item 2' }] },
+      ],
+    },
+    {
+      type: 'link',
+      url: 'https://www.example.com',
+      children: [{ type: 'text', value: 'Example Link' }],
+    },
+  ],
+}
+
+// Fetch schema function
+const fetchSchema = async url => {
+  const res = await fetch(url) // Replace with your API endpoint
+  return await res.json()
+}
+
+// React component that converts a schema to HTML, has default classes that can be overwritten
+// if no schema exists the user csn pass thr spi route as prop
+export default function RichTextToHTML({ schema, options, apiRoute }) {
+  const [currentSchema, setCurrentSchema] = useState(schema || null)
+
+  useEffect(async () => {
+    if (!currentSchema && apiRoute) {
+      const richTextSchema = await fetchSchema(api)
+      setCurrentSchema(richTextSchema)
+    }
+  }, [currentSchema])
+
+  //options passed via props override default options (classes,scoped, newLineToBreak)
+  const combinedOptions = {
+    ...defaultOptions,
+    ...options,
+  }
+
+  const html = currentSchema ? convertSchemaToHtml(currentSchema, combinedOptions) : ''
+  return (
+    <>
+      <div className="html" dangerouslySetInnerHTML={{ __html: html }} />
+    </>
+  )
+}
+```
+
+Example of the react RichTextToHTML component in use
+
+```javascript
+// App.jsx
+import React from 'react'
+import RichTextToHTML from './RichTextToHTML'
+
+// Custom schema for/mock rich text metaobject get request
+const schema = {
+  type: 'root',
+  children: [
+    {
+      type: 'heading',
+      level: 2,
+      children: [{ type: 'text', value: 'Custom Heading 2' }],
+    },
+    {
+      type: 'paragraph',
+      children: [{ type: 'text', value: 'This is a custom paragraph.' }],
+    },
+  ],
+}
+
+// Custom options for demonstration of overriding defaults.
+// Note: you probably wouldn't need to set the scoped class name & apply unique classes per element
+const customOptions = {
+  scoped: 'custom-scope',
+  classes: {
+    p: 'text-lg text-slate-800 my-2',
+    h2: 'text-2xl md:text-4xl font-semibold leading-none tracking-wide mb-2',
+  },
+  newLineToBreak: true,
+}
+
+// Main React App Component
+const App = () => {
+  return (
+    <div className="container flex flex-col gap-4 mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">Shopify Storefront</h1>
+      <RichTextToHTML schema={schema} options={customOptions} />
+      {/* Example without being passed a schema to trigger a fetch request from shopify. **Passing the api route doesn't really make sense & is for demonstration purposes only */}
+      <RichTextToHTML
+        options={customOptions}
+        apiRoute="/api/metaobjects/richtext/user-profile?api-key=tH3BeY0ndGr0vp"
+      />
+    </div>
+  )
+}
+
+export default App
 ```
 
 Here is a [JSFiddle Demo](https://jsfiddle.net/r2d4wsna/) that shows a working example.
