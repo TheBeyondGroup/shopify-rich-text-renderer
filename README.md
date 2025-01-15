@@ -150,7 +150,6 @@ const defaultOptions = {
   },
 };
 
-
 function mergeOptions(
   options: Options,
   defaultOptions: Options,
