@@ -117,7 +117,9 @@ function buildLink(el, options) {
 
 function buildText(el, options) {
   const { classes, newLineToBreak } = options
-  if (el?.bold) {
+  if (el?.bold && el?.italic) {
+    return createElement('strong', classes, createElement('em', classes, el?.value))
+  } else if (el?.bold) {
     return createElement('strong', classes, el?.value)
   } else if (el?.italic) {
     return createElement('em', classes, el?.value)

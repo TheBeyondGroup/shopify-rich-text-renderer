@@ -5,14 +5,14 @@
 import { convertSchemaToHtml } from '../src/index.js'
 
 const resString =
-  '{"type":"root","children":[{"type":"paragraph","children":[{"type":"text","value":"This is italicized text and ","italic":true},{"url":"https://example.com","title":"Link to example.com","type":"link","children":[{"type":"text","value":"a bolded hyperlink","bold":true}]},{"type":"text","value":""}]},{"type":"paragraph","children":[{"type":"text","value":"This is test. New\\nlines\\nare supported."}]},{"type":"heading","children":[{"type":"text","value":"Heading 1"}],"level":1},{"listType":"unordered","type":"list","children":[{"type":"list-item","children":[{"type":"text","value":"item1"}]},{"type":"list-item","children":[{"type":"text","value":"item2"}]}]},{"type":"heading","level":4,"children":[{"type":"text","value":"Heading 4"}]},{"listType":"ordered","type":"list","children":[{"type":"list-item","children":[{"type":"text","value":"a"}]},{"type":"list-item","children":[{"type":"text","value":"b"}]},{"type":"list-item","children":[{"type":"text","value":"c"}]}]}]}'
+  '{"type":"root","children":[{"type":"paragraph","children":[{"type":"text","value":"This is italicized text and ","italic":true, "bold":true},{"url":"https://example.com","title":"Link to example.com","type":"link","children":[{"type":"text","value":"a bolded hyperlink","bold":true}]},{"type":"text","value":""}]},{"type":"paragraph","children":[{"type":"text","value":"This is test. New\\nlines\\nare supported."}]},{"type":"heading","children":[{"type":"text","value":"Heading 1"}],"level":1},{"listType":"unordered","type":"list","children":[{"type":"list-item","children":[{"type":"text","value":"item1"}]},{"type":"list-item","children":[{"type":"text","value":"item2"}]}]},{"type":"heading","level":4,"children":[{"type":"text","value":"Heading 4"}]},{"listType":"ordered","type":"list","children":[{"type":"list-item","children":[{"type":"text","value":"a"}]},{"type":"list-item","children":[{"type":"text","value":"b"}]},{"type":"list-item","children":[{"type":"text","value":"c"}]}]}]}'
 const resObject = {
   type: 'root',
   children: [
     {
       type: 'paragraph',
       children: [
-        { type: 'text', value: 'This is italicized text and ', italic: true },
+        { type: 'text', value: 'This is italicized text and ', italic: true, bold: true },
         {
           url: 'https://example.com',
           title: 'Link to example.com',
@@ -101,6 +101,12 @@ test('check newLineToBreak renders line break elements', () => {
   document.body.innerHTML = html
   expect(document.querySelector('p:nth-child(2)').innerHTML).toBe('This is test. New<br>lines<br>are supported.')
   expect(document.querySelector('p:nth-child(2)').textContent.includes('\n')).toBe(false)
+})
+
+test('Check text is bold and italic when both are set to true', () => {
+  const html = convertSchemaToHtml(resObject)
+  document.body.innerHTML = html
+  expect(document.querySelector('p>strong>em').textContent).toBe('This is italicized text and ')
 })
 
 test('check class options applied to elements', () => {
