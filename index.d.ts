@@ -1,6 +1,5 @@
 declare module '@thebeyondgroup/shopify-rich-text-renderer' {
-
-  /** Shopify rich text schema */
+  /** Shopify richtext schema */
   export interface Schema {
     type: string
     children?: Schema[]
@@ -14,7 +13,7 @@ declare module '@thebeyondgroup/shopify-rich-text-renderer' {
     value?: string
   }
 
-  /** Optional options for rendering Shopify rich text to HTML */
+  /** Optional options for rendering Shopify richtext to HTML */
   export interface Options {
     /** allows for the rich text HTML to be easily styled */
     scoped?: boolean | string
@@ -50,6 +49,6 @@ declare module '@thebeyondgroup/shopify-rich-text-renderer' {
     }
   }
 
-  /** Converts Shopify rich text to HTML */
+  /** Converts Shopify richtext schema  to HTML */
   export function convertSchemaToHtml(schema: string | Schema | Schema[], options?: Options | string | boolean): string
 }

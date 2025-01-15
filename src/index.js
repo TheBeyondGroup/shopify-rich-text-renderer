@@ -1,3 +1,13 @@
+/* Shopify Metafield & Metaobject Rich Text Editor Schema to HTML Converter */
+
+/**
+ * Converts Shopify Richtext Schema to HTML.
+ *
+ * @param {Object|string} schema - The schema object or JSON string to convert.
+ * @param {Object} [options={}] - The conversion options.
+ * @param {string|boolean} [options.scoped] - The scoped class name or a boolean value indicating whether to use the default scoped class name.
+ * @returns {string} The converted HTML string.
+ */
 export function convertSchemaToHtml(schema, options = {}) {
   let { scoped } = options
   let html = ''
@@ -73,29 +83,29 @@ function createElement(tag, classes, content, attributes = {}) {
   return `<${tag}${outputAttributes(attributes)}>${content}</${tag}>`
 }
 
-export function buildParagraph(el, options) {
+function buildParagraph(el, options) {
   const { classes } = options
   return createElement('p', classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildHeading(el, options) {
+function buildHeading(el, options) {
   const { classes } = options
   const tag = `h${el?.level}`
   return createElement(tag, classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildList(el, options) {
+function buildList(el, options) {
   const { classes } = options
   const tag = el?.listType === 'ordered' ? 'ol' : 'ul'
   return createElement(tag, classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildListItem(el, options) {
+function buildListItem(el, options) {
   const { classes } = options
   return createElement('li', classes, convertSchemaToHtml(el?.children, options))
 }
 
-export function buildLink(el, options) {
+function buildLink(el, options) {
   const { classes } = options
   const attributes = {
     href: el?.url,
@@ -105,7 +115,7 @@ export function buildLink(el, options) {
   return createElement('a', classes, convertSchemaToHtml(el?.children, options), attributes)
 }
 
-export function buildText(el, options) {
+function buildText(el, options) {
   const { classes, newLineToBreak } = options
   if (el?.bold) {
     return createElement('strong', classes, el?.value)
