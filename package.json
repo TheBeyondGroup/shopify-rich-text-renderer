@@ -3,7 +3,10 @@
   "version": "2.1.0",
   "description": "Convert Shopify's Metafields/Metaobjects rich text type from a rich text AST/schema to HTML. Works great with hydrogen/headless & regular storefronts.",
   "main": "src/index.js",
-  "repository": "https://github.com/TheBeyondGroup/shopify-rich-text-renderer.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheBeyondGroup/shopify-rich-text-renderer.git"
+  },
   "author": {
     "name": "Sean McQuaid",
     "email": "sean@decrypteddesign.com",
