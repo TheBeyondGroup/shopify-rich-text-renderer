@@ -1,5 +1,119 @@
 /* Shopify Metafield & Metaobject Rich Text Editor Schema to HTML Converter */
 
+function convertElementToRichTextSchema(element) {
+  let shopifyRichTextObject: ShopifyRichText = {} as ShopifyRichText;
+  let currentElementCanHaveChildren = true;
+
+  if (['style','script'].includes(element.tagName.toLowerCase())) {
+    return null; // Drop the element if it matches any tag in the list
+  }
+
+  if (element.tagName.toLowerCase() === 'body') {
+    shopifyRichTextObject = { type: 'root' };
+  } else {
+    switch (element.tagName.toLowerCase()) {
+      case 'h1':
+        shopifyRichTextObject = { type: 'heading', level: 1 };
+        break;
+      case 'h2':
+        shopifyRichTextObject = { type: 'heading', level: 2 };
+        break;
+      case 'h3':
+        shopifyRichTextObject = { type: 'heading', level: 3 };
+        break;
+      case 'h4':
+        shopifyRichTextObject = { type: 'heading', level: 4 };
+        break;
+      case 'h5':
+        shopifyRichTextObject = { type: 'heading', level: 5 };
+        break;
+      case 'p':
+        shopifyRichTextObject = { type: 'paragraph' };
+        break;
+      case 'a':
+        shopifyRichTextObject = { type: 'link' };
+        break;
+      case 'ol':
+        shopifyRichTextObject = { type: 'list', listType: 'ordered' };
+        break;
+      case 'ul':
+        shopifyRichTextObject = { type: 'list', listType: 'unordered' };
+        break;
+      case 'li':
+        shopifyRichTextObject = { type: 'list-item' };
+        break;
+      case 'b':
+      case 'strong':
+        shopifyRichTextObject = { type: 'text', bold: true, value: element.textContent };
+        currentElementCanHaveChildren = false;
+        break;
+      case 'em':
+        shopifyRichTextObject = { type: 'text', italic: true, value: element.textContent };
+        currentElementCanHaveChildren = false;
+        break;
+      default:
+        // add unknown elements as text with raw HTML for later editing
+        shopifyRichTextObject = { type: 'text', value: element.innerHTML };
+        currentElementCanHaveChildren = false;
+        break;
+    }
+  }
+
+  if (currentElementCanHaveChildren) {
+    // only hyperlinks get attributes
+    if (element.attributes && shopifyRichTextObject.type === 'link') {
+      for (let attribute of element.attributes) {
+        if (attribute.name === 'href') {
+          shopifyRichTextObject['url'] = attribute.value;
+        }
+        if (attribute.name === 'title') {
+          shopifyRichTextObject['title'] = attribute.value;
+        }
+      }
+    }
+
+    shopifyRichTextObject.children = [];
+    for (let subElement of element.childNodes) {
+      if (subElement.nodeType === subElement.TEXT_NODE) {
+        const trimmedText = subElement.textContent?.trim();
+        if (trimmedText) {
+          shopifyRichTextObject.children.push({ type: 'text', value: trimmedText });
+        }
+      } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
+        const resultObj = elementToObj(subElement as HTMLElement);
+        if(resultObj){
+          shopifyRichTextObject.children.push(resultObj);
+        }
+      }
+    }
+  }
+
+  return shopifyRichTextObject;
+}
+
+/**
+ * Converts HTML to Shopify Richtext Schema. Modified from https://gist.github.com/edmeehan/b47642f8972e5df3a0e8460aa3a80a87
+ *
+ * @param {string} schema - The HTML string to convert.
+ * @param {Object} [options={}] - The conversion options.
+ * @returns {Object} The converted Richtext Schema object.
+ */
+export function convertHtmlToSchema(htmlString, options = {}) {
+  const { replaceTags } = options;
+  const newString = htmlString.replace('<br />','\n');
+  if(replaceTags?.length){
+    replaceTags.forEach(([old, new]) => {
+      newString = newString.replaceAll(`<${old}>`, `<${new}>`);
+      newString = newString.replaceAll(`<${old}/>`, `<${new}/>`);
+    });
+  }
+
+  const dom = new JSDOM(newString);
+  const element = dom.window.document.body;
+  
+  return convertElementToRichTextSchema(element);
+}
+
 /**
  * Converts Shopify Richtext Schema to HTML.
  *
