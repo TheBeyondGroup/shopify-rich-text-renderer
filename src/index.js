@@ -1,7 +1,7 @@
 /* Shopify Metafield & Metaobject Rich Text Editor Schema to HTML Converter */
 
 function convertElementToRichTextSchema(element) {
-  let shopifyRichTextObject: ShopifyRichText = {} as ShopifyRichText;
+  let shopifyRichTextObject = {};
   let currentElementCanHaveChildren = true;
 
   if (['style','script'].includes(element.tagName.toLowerCase())) {
@@ -80,7 +80,7 @@ function convertElementToRichTextSchema(element) {
           shopifyRichTextObject.children.push({ type: 'text', value: trimmedText });
         }
       } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
-        const resultObj = elementToObj(subElement as HTMLElement);
+        const resultObj = elementToObj(subElement);
         if(resultObj){
           shopifyRichTextObject.children.push(resultObj);
         }
@@ -94,14 +94,14 @@ function convertElementToRichTextSchema(element) {
 /**
  * Converts HTML to Shopify Richtext Schema. Modified from https://gist.github.com/edmeehan/b47642f8972e5df3a0e8460aa3a80a87
  *
- * @param {string} schema - The HTML string to convert.
+ * @param {string} htmlString - The HTML string to convert.
  * @param {Object} [options={}] - The conversion options.
  * @returns {Object} The converted Richtext Schema object.
  */
 export function convertHtmlToSchema(htmlString, options = {}) {
   const { replaceTags } = options;
   const newString = htmlString.replace('<br />','\n');
-  if(replaceTags?.length){
+  if((replaceTags?.length ?? 0) > 0){
     replaceTags.forEach(([old, new]) => {
       newString = newString.replaceAll(`<${old}>`, `<${new}>`);
       newString = newString.replaceAll(`<${old}/>`, `<${new}/>`);
