@@ -8,6 +8,9 @@ function convertElementToRichTextSchema(element) {
     return null; // Drop the element if it matches any tag in the list
   }
 
+  const isParentHeading = ['h1','h2','h3','h4','h5','h6'].includes(element.parentElement?.tagName?.toLowerCase() ?? '');
+  const textType = isParentHeading ? 'text' : 'paragraph';
+
   if (element.tagName.toLowerCase() === 'body') {
     shopifyRichTextObject = { type: 'root' };
   } else {
@@ -28,7 +31,7 @@ function convertElementToRichTextSchema(element) {
         shopifyRichTextObject = { type: 'heading', level: 5 };
         break;
       case 'p':
-        shopifyRichTextObject = { type: 'paragraph' };
+        shopifyRichTextObject = { type: textType };
         break;
       case 'a':
         shopifyRichTextObject = { type: 'link' };
@@ -44,16 +47,16 @@ function convertElementToRichTextSchema(element) {
         break;
       case 'b':
       case 'strong':
-        shopifyRichTextObject = { type: 'paragraph', bold: true, value: element.textContent };
+        shopifyRichTextObject = { type: textType, bold: true, value: element.textContent };
         currentElementCanHaveChildren = false;
         break;
       case 'em':
-        shopifyRichTextObject = { type: 'paragraph', italic: true, value: element.textContent };
+        shopifyRichTextObject = { type: textType, italic: true, value: element.textContent };
         currentElementCanHaveChildren = false;
         break;
       default:
         // add unknown elements as text with raw HTML for later editing
-        shopifyRichTextObject = { type: 'paragraph', value: element.innerHTML };
+        shopifyRichTextObject = { type: textType, value: element.innerHTML };
         currentElementCanHaveChildren = false;
         break;
     }
@@ -77,7 +80,7 @@ function convertElementToRichTextSchema(element) {
       if (subElement.nodeType === subElement.TEXT_NODE) {
         const trimmedText = subElement.textContent?.trim();
         if (trimmedText) {
-          shopifyRichTextObject.children.push({ type: 'paragraph', value: trimmedText });
+          shopifyRichTextObject.children.push({ type: textType, value: trimmedText });
         }
       } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
         const resultObj = elementToObj(subElement);
