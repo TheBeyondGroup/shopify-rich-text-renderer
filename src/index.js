@@ -1,97 +1,124 @@
 /* Shopify Metafield & Metaobject Rich Text Editor Schema to HTML Converter */
 
 function convertElementToRichTextSchema(element) {
-  let shopifyRichTextObject = {};
-  let currentElementCanHaveChildren = true;
+    let shopifyRichTextObject = {};
+    let currentElementCanHaveChildren = true;
 
-  if (['style','script'].includes(element.tagName.toLowerCase())) {
-    return null; // Drop the element if it matches any tag in the list
-  }
-
-  const isParentHeading = ['h1','h2','h3','h4','h5','h6'].includes(element.parentElement?.tagName?.toLowerCase() ?? '');
-  const textType = isParentHeading ? 'text' : 'paragraph';
-
-  if (element.tagName.toLowerCase() === 'body') {
-    shopifyRichTextObject = { type: 'root' };
-  } else {
-    switch (element.tagName.toLowerCase()) {
-      case 'h1':
-        shopifyRichTextObject = { type: 'heading', level: 1 };
-        break;
-      case 'h2':
-        shopifyRichTextObject = { type: 'heading', level: 2 };
-        break;
-      case 'h3':
-        shopifyRichTextObject = { type: 'heading', level: 3 };
-        break;
-      case 'h4':
-        shopifyRichTextObject = { type: 'heading', level: 4 };
-        break;
-      case 'h5':
-        shopifyRichTextObject = { type: 'heading', level: 5 };
-        break;
-      case 'p':
-        shopifyRichTextObject = { type: textType };
-        break;
-      case 'a':
-        shopifyRichTextObject = { type: 'link' };
-        break;
-      case 'ol':
-        shopifyRichTextObject = { type: 'list', listType: 'ordered' };
-        break;
-      case 'ul':
-        shopifyRichTextObject = { type: 'list', listType: 'unordered' };
-        break;
-      case 'li':
-        shopifyRichTextObject = { type: 'list-item' };
-        break;
-      case 'b':
-      case 'strong':
-        shopifyRichTextObject = { type: textType, bold: true, value: element.textContent };
-        currentElementCanHaveChildren = false;
-        break;
-      case 'em':
-        shopifyRichTextObject = { type: textType, italic: true, value: element.textContent };
-        currentElementCanHaveChildren = false;
-        break;
-      default:
-        // add unknown elements as text with raw HTML for later editing
-        shopifyRichTextObject = { type: textType, value: element.innerHTML };
-        currentElementCanHaveChildren = false;
-        break;
+    if (['style','script'].includes(element.tagName.toLowerCase())) {
+      return null; // Drop the element if it matches any tag in the list
     }
-  }
 
-  if (currentElementCanHaveChildren) {
-    // only hyperlinks get attributes
-    if (element.attributes && shopifyRichTextObject.type === 'link') {
-      for (let attribute of element.attributes) {
-        if (attribute.name === 'href') {
-          shopifyRichTextObject['url'] = attribute.value;
+    const textType = isParentRoot ? 'paragraph' : 'text';
+    let bold = false;
+    let italic = false;
+
+    if (element.tagName.toLowerCase() === 'body') {
+      shopifyRichTextObject = { type: 'root' };
+    } else {
+      switch (element.tagName.toLowerCase()) {
+        case 'h1':
+          shopifyRichTextObject = { type: 'heading', level: 1 };
+          break;
+        case 'h2':
+          shopifyRichTextObject = { type: 'heading', level: 2 };
+          break;
+        case 'h3':
+          shopifyRichTextObject = { type: 'heading', level: 3 };
+          break;
+        case 'h4':
+          shopifyRichTextObject = { type: 'heading', level: 4 };
+          break;
+        case 'h5':
+          shopifyRichTextObject = { type: 'heading', level: 5 };
+          break;
+        case 'p':
+          shopifyRichTextObject = { type: 'paragraph' };
+          break;
+        case 'a':
+          shopifyRichTextObject = { type: 'link' };
+          break;
+        case 'ol':
+          shopifyRichTextObject = { type: 'list', listType: 'ordered' };
+          break;
+        case 'ul':
+          shopifyRichTextObject = { type: 'list', listType: 'unordered' };
+          break;
+        case 'li':
+          shopifyRichTextObject = { type: 'list-item' };
+          break;
+        case 'b':
+        case 'strong':
+          bold = true;
+          shopifyRichTextObject = textType === 'paragraph' ? { type: textType } : {
+            type: textType,
+            bold: true,
+            value: element.textContent,
+          };
+          currentElementCanHaveChildren = textType === 'paragraph';
+          break;
+        case 'em':
+          italic = true;
+          shopifyRichTextObject = textType === 'paragraph' ? { type: textType } :{
+            type: textType,
+            italic: true,
+            value: element.textContent,
+          };
+          currentElementCanHaveChildren = textType === 'paragraph';
+          break;
+        default:
+          // add unknown elements as text with raw HTML for later editing
+          shopifyRichTextObject = textType === 'paragraph' ? { type: textType } : {
+            type: textType,
+            value: element.innerHTML,
+          };
+          currentElementCanHaveChildren = textType === 'paragraph';
+          break;
+      }
+    }
+
+    if (currentElementCanHaveChildren) {
+      // only hyperlinks get attributes
+      if (element.attributes && shopifyRichTextObject.type === 'link') {
+        for (let attribute of element.attributes) {
+          if (attribute.name === 'href') {
+            shopifyRichTextObject['url'] = attribute.value;
+          }
+          if (attribute.name === 'title') {
+            shopifyRichTextObject['title'] = attribute.value;
+          }
         }
-        if (attribute.name === 'title') {
-          shopifyRichTextObject['title'] = attribute.value;
+      }
+
+      shopifyRichTextObject.children = [];
+      for (let subElement of element.childNodes) {
+        if (subElement.nodeType === subElement.TEXT_NODE) {
+          const trimmedText = subElement.textContent?.trim();
+          if (trimmedText) {
+            const textNode = {
+              type: 'text' as const,
+              value: trimmedText,
+              bold,
+              italic,
+            };
+            if(shopifyRichTextObject.type === 'root') {
+              shopifyRichTextObject.children.push({ 
+                type: 'paragraph', 
+                children: [textNode],
+              });
+            } else {
+              shopifyRichTextObject.children.push(textNode);
+            }
+          }
+        } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
+          const resultObj = elementToObj(subElement, shopifyRichTextObject.type === 'root');
+          if(resultObj){
+            shopifyRichTextObject.children.push(resultObj);
+          }
         }
       }
     }
 
-    shopifyRichTextObject.children = [];
-    for (let subElement of element.childNodes) {
-      if (subElement.nodeType === subElement.TEXT_NODE) {
-        const trimmedText = subElement.textContent?.trim();
-        if (trimmedText) {
-          shopifyRichTextObject.children.push({ type: textType, value: trimmedText });
-        }
-      } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
-        const resultObj = elementToObj(subElement);
-        if(resultObj){
-          shopifyRichTextObject.children.push(resultObj);
-        }
-      }
-    }
-  }
-
-  return shopifyRichTextObject;
+    return shopifyRichTextObject;
 }
 
 /**
@@ -101,13 +128,16 @@ function convertElementToRichTextSchema(element) {
  * @param {Object} [options={}] - The conversion options.
  * @returns {Object} The converted Richtext Schema object.
  */
-export function convertHtmlToSchema(htmlString, options = {}) {
-  const { replaceTags } = options;
-  const newString = htmlString.replace('<br />','\n');
-  if((replaceTags?.length ?? 0) > 0){
-    replaceTags.forEach(([old, new]) => {
-      newString = newString.replaceAll(`<${old}>`, `<${new}>`);
-      newString = newString.replaceAll(`<${old}/>`, `<${new}/>`);
+export function convertHtmlToSchema(htmlString, options = { replaceTags: [], removeLineBreaks: true }) {
+  const { replaceTags, removeLineBreaks } = options;
+  let newString = htmlString;
+  if(removeLinkBreaks){
+    newString = newString.replaceAll('<br />','\n');
+  }
+  if(replaceTags.length > 0){
+    replaceTags.forEach(([oldTag, newTag]) => {
+      newString = newString.replaceAll(`<${oldTag}>`, `<${newTag}>`);
+      newString = newString.replaceAll(`<${oldTag}/>`, `<${newTag}/>`);
     });
   }
 
