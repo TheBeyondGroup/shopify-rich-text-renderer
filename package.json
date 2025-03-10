@@ -26,6 +26,9 @@
     "lint": "npx eslint src/index.js",
     "lint:fix": "npx eslint --fix src/index.js"
   },
+  "dependencies": {
+    "jsdom": "^26.0.0"
+  },
   "devDependencies": {
     "@babel/preset-react": "^7.24.7",
     "eslint": "^8.37.0",
