@@ -44,16 +44,16 @@ function convertElementToRichTextSchema(element) {
         break;
       case 'b':
       case 'strong':
-        shopifyRichTextObject = { type: 'text', bold: true, value: element.textContent };
+        shopifyRichTextObject = { type: 'paragraph', bold: true, value: element.textContent };
         currentElementCanHaveChildren = false;
         break;
       case 'em':
-        shopifyRichTextObject = { type: 'text', italic: true, value: element.textContent };
+        shopifyRichTextObject = { type: 'paragraph', italic: true, value: element.textContent };
         currentElementCanHaveChildren = false;
         break;
       default:
         // add unknown elements as text with raw HTML for later editing
-        shopifyRichTextObject = { type: 'text', value: element.innerHTML };
+        shopifyRichTextObject = { type: 'paragraph', value: element.innerHTML };
         currentElementCanHaveChildren = false;
         break;
     }
@@ -77,7 +77,7 @@ function convertElementToRichTextSchema(element) {
       if (subElement.nodeType === subElement.TEXT_NODE) {
         const trimmedText = subElement.textContent?.trim();
         if (trimmedText) {
-          shopifyRichTextObject.children.push({ type: 'text', value: trimmedText });
+          shopifyRichTextObject.children.push({ type: 'paragraph', value: trimmedText });
         }
       } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
         const resultObj = elementToObj(subElement);
