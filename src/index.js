@@ -52,7 +52,7 @@ const ELEMENT_TO_RICH_TEXT_CONVERTORS = {
   },
 };
 
-const singleNodeToRichTextObject = (node) => {
+function singleNodeToRichTextObject(node) {
   const parentNode = node.parentNode;
   const isBoldText = parentNode?.nodeType === node.ELEMENT_NODE && 
     parentNode?.tagName === 'strong';
@@ -75,7 +75,7 @@ const singleNodeToRichTextObject = (node) => {
   }
 }
 
-const convertElementToRichTextSchema = (element) => {
+function convertElementToRichTextSchema(element) {
   const richText = singleNodeToRichTextObject(element);
   if(!richText){
     return null;
