@@ -1,125 +1,113 @@
 /* Shopify Metafield & Metaobject Rich Text Editor Schema to HTML Converter */
 
-function convertElementToRichTextSchema(element) {
-    let shopifyRichTextObject = {};
-    let currentElementCanHaveChildren = true;
+const ELEMENT_TO_RICH_TEXT_CONVERTORS = {
+  'body': (element) => {
+    return { type: 'root' };
+  },
+  'h1': (element) => {
+    return { type: 'heading', level: 1 };
+  },
+  'h2':  (element) => {
+    return { type: 'heading', level: 2 };
+  },
+  'h3':  (element) => {
+    return { type: 'heading', level: 3 };
+  },
+  'h4':  (element) => {
+    return { type: 'heading', level: 4 };
+  },
+  'h5':  (element) => {
+    return { type: 'heading', level: 5 };
+  },
+  'p':  (element) => {
+    return { type: 'paragraph' };
+  },
+  'a':  (element) => {
+    return {
+      type: 'link',
+      url: element.attributes.getNamedItem('href')?.value ?? undefined,
+      title: element.attributes.getNamedItem('title')?.value ?? undefined,
+    };
+  },
+  'ol':  (element) => {
+    return { type: 'list', listType: 'ordered' };
+  },
+  'ul':  (element) => {
+    return { type: 'list', listType: 'unordered' };
+  },
+  'li':  (element) => {
+    return { type: 'list-item' };
+  },
+  'b':  (element) => {
+    return { type: 'paragraph' };
+  },
+  'strong':  (element) => {
+    return { type: 'paragraph' };
+  },
+  'em':  (element) => {
+    return { type: 'paragraph' };
+  },
+  'other':  (element) => {
+    return null;
+  },
+};
 
-    if (['style','script'].includes(element.tagName.toLowerCase())) {
-      return null; // Drop the element if it matches any tag in the list
-    }
-
-    const textType = isParentRoot ? 'paragraph' : 'text';
-    let bold = false;
-    let italic = false;
-
-    if (element.tagName.toLowerCase() === 'body') {
-      shopifyRichTextObject = { type: 'root' };
-    } else {
-      switch (element.tagName.toLowerCase()) {
-        case 'h1':
-          shopifyRichTextObject = { type: 'heading', level: 1 };
-          break;
-        case 'h2':
-          shopifyRichTextObject = { type: 'heading', level: 2 };
-          break;
-        case 'h3':
-          shopifyRichTextObject = { type: 'heading', level: 3 };
-          break;
-        case 'h4':
-          shopifyRichTextObject = { type: 'heading', level: 4 };
-          break;
-        case 'h5':
-          shopifyRichTextObject = { type: 'heading', level: 5 };
-          break;
-        case 'p':
-          shopifyRichTextObject = { type: 'paragraph' };
-          break;
-        case 'a':
-          shopifyRichTextObject = { type: 'link' };
-          break;
-        case 'ol':
-          shopifyRichTextObject = { type: 'list', listType: 'ordered' };
-          break;
-        case 'ul':
-          shopifyRichTextObject = { type: 'list', listType: 'unordered' };
-          break;
-        case 'li':
-          shopifyRichTextObject = { type: 'list-item' };
-          break;
-        case 'b':
-        case 'strong':
-          bold = true;
-          shopifyRichTextObject = textType === 'paragraph' ? { type: textType } : {
-            type: textType,
-            bold: true,
-            value: element.textContent,
-          };
-          currentElementCanHaveChildren = textType === 'paragraph';
-          break;
-        case 'em':
-          italic = true;
-          shopifyRichTextObject = textType === 'paragraph' ? { type: textType } :{
-            type: textType,
-            italic: true,
-            value: element.textContent,
-          };
-          currentElementCanHaveChildren = textType === 'paragraph';
-          break;
-        default:
-          // add unknown elements as text with raw HTML for later editing
-          shopifyRichTextObject = textType === 'paragraph' ? { type: textType } : {
-            type: textType,
-            value: element.innerHTML,
-          };
-          currentElementCanHaveChildren = textType === 'paragraph';
-          break;
-      }
-    }
-
-    if (currentElementCanHaveChildren) {
-      // only hyperlinks get attributes
-      if (element.attributes && shopifyRichTextObject.type === 'link') {
-        for (let attribute of element.attributes) {
-          if (attribute.name === 'href') {
-            shopifyRichTextObject['url'] = attribute.value;
-          }
-          if (attribute.name === 'title') {
-            shopifyRichTextObject['title'] = attribute.value;
-          }
-        }
-      }
-
-      shopifyRichTextObject.children = [];
-      for (let subElement of element.childNodes) {
-        if (subElement.nodeType === subElement.TEXT_NODE) {
-          const trimmedText = subElement.textContent?.trim();
-          if (trimmedText) {
-            const textNode = {
-              type: 'text' as const,
-              value: trimmedText,
-              bold,
-              italic,
-            };
-            if(shopifyRichTextObject.type === 'root') {
-              shopifyRichTextObject.children.push({ 
-                type: 'paragraph', 
-                children: [textNode],
-              });
-            } else {
-              shopifyRichTextObject.children.push(textNode);
-            }
-          }
-        } else if (subElement.nodeType === subElement.ELEMENT_NODE) {
-          const resultObj = elementToObj(subElement, shopifyRichTextObject.type === 'root');
-          if(resultObj){
-            shopifyRichTextObject.children.push(resultObj);
-          }
-        }
-      }
-    }
-
-    return shopifyRichTextObject;
+const singleNodeToRichTextObject = (node) => {
+  const parentNode = node.parentNode;
+  const isBoldText = parentNode?.nodeType === node.ELEMENT_NODE && 
+    parentNode?.tagName === 'strong';
+  const isItalicText = parentNode?.nodeType === node.ELEMENT_NODE && 
+    parentNode?.tagName === 'em';
+  switch(node.nodeType){
+    case node.ELEMENT_NODE:
+      const element = node;
+      const convertor = ELEMENT_TO_RICH_TEXT_CONVERTORS[element.tagName] ?? ELEMENT_TO_RICH_TEXT_CONVERTORS.other;
+      return convertor(element);
+    case node.TEXT_NODE:
+      return {
+        type: 'text',
+        value: node.textContent,
+        bold: isBoldText,
+        italic: isItalicText,
+      };
+    default:
+      return null;
+  }
 }
+
+const convertElementToRichTextSchema = (element) => {
+  const richText = singleNodeToRichTextObject(element);
+  if(!richText){
+    return null;
+  }
+
+  if(element.childNodes.length > 0){
+    richText.children = [];
+
+    for(let child of element.childNodes){
+      const childRichText = singleNodeToRichTextObject(child);
+      if(!childRichText){
+        continue;
+      }
+      richText.children.push(childRichText);
+    }
+  }
+
+  return richText;
+}
+
+function convertHtmlToRichText (htmlString, replaceTags = [], replaceBreaksWithNewLines = true) {
+  let newString = htmlString;
+  if(replaceBreaksWithNewLines) {
+    newString = htmlString.replace('<br />','\n');
+  }
+  replaceTags.forEach(([oldTag, newTag]) => {
+    newString = newString.replaceAll(`<${oldTag}>`, `<${newTag}>`);
+    newString = newString.replaceAll(`<${oldTag}/>`, `<${newTag}/>`);
+  });
+  const dom = new JSDOM(newString);
+  return convertElementToRichTextSchema(dom.window.document.body);
+};
 
 /**
  * Converts HTML to Shopify Richtext Schema. Modified from https://gist.github.com/edmeehan/b47642f8972e5df3a0e8460aa3a80a87
