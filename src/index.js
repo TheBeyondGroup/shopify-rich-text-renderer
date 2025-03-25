@@ -96,19 +96,6 @@ function convertElementToRichTextSchema(element) {
   return richText;
 }
 
-function convertHtmlToRichText (htmlString, replaceTags = [], replaceBreaksWithNewLines = true) {
-  let newString = htmlString;
-  if(replaceBreaksWithNewLines) {
-    newString = htmlString.replace('<br />','\n');
-  }
-  replaceTags.forEach(([oldTag, newTag]) => {
-    newString = newString.replaceAll(`<${oldTag}>`, `<${newTag}>`);
-    newString = newString.replaceAll(`<${oldTag}/>`, `<${newTag}/>`);
-  });
-  const dom = new JSDOM(newString);
-  return convertElementToRichTextSchema(dom.window.document.body);
-};
-
 /**
  * Converts HTML to Shopify Richtext Schema. Modified from https://gist.github.com/edmeehan/b47642f8972e5df3a0e8460aa3a80a87
  *
