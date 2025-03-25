@@ -85,7 +85,7 @@ function convertElementToRichTextSchema(element) {
     richText.children = [];
 
     for(let child of element.childNodes){
-      const childRichText = singleNodeToRichTextObject(child);
+      const childRichText = convertElementToRichTextSchema(child);
       if(!childRichText){
         continue;
       }
