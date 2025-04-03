@@ -106,7 +106,7 @@ function convertElementToRichTextSchema(element) {
 export function convertHtmlToSchema(htmlString, options = { replaceTags: [], removeLineBreaks: true }) {
   const { replaceTags, removeLineBreaks } = options;
   let newString = htmlString;
-  if(removeLinkBreaks){
+  if(removeLineBreaks){
     newString = newString.replaceAll('<br />','\n');
   }
   if(replaceTags.length > 0){
