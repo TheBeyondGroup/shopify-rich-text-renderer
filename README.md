@@ -1,5 +1,7 @@
 ## Shopify Rich Text Renderer
 
+![GitHub Repo stars](https://img.shields.io/github/stars/TheBeyondGroup/shopify-rich-text-renderer?style=flat&label=Github%20Stars&labelColor=212121&color=%23AF431F&link=https%3A%2F%2Fgithub.com%2FTheBeyondGroup%2Fshopify-rich-text-renderer) ![npm package minimized gzipped size](<https://img.shields.io/bundlejs/size/%40thebeyondgroup/shopify-rich-text-renderer?style=flat&labelColor=212121&label=Minified%20Size%20(gzip)&color=%2363956C&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40thebeyondgroup%2Fshopify-rich-text-renderer>) ![NPM Downloads](https://img.shields.io/npm/d18m/%40thebeyondgroup%2Fshopify-rich-text-renderer?style=flat&labelColor=212121&label=NPM%20Downloads%2FYear&color=%23F2B65B&link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2F%40thebeyondgroup%2Fshopify-rich-text-renderer) ![GitHub License](https://img.shields.io/github/license/TheBeyondGroup/shopify-rich-text-renderer?style=flat&labelColor=212121&label=License&color=%235f84ee&link=https%3A%2F%2Fgithub.com%2FTheBeyondGroup%2Fshopify-rich-text-renderer%3Ftab%3DMIT-1-ov-file%23readme)
+
 This package converts the rich text schema returned by Shopify's Storefront API to an HTML string. In particular, this package is useful when dealing with the rich text field type for _MetaObjects_ and _Metafields_ when using the Storefront API. Supports all of Shopify's Richtext Editor markup, including new line characters, and both **_bold & italic_** on the same text node.
 
 ### Usage
@@ -288,4 +290,4 @@ export default App
 **Live Examples**
 
 - [JSFiddle: Basic Use](https://jsfiddle.net/r2d4wsna/)
-- [Stackblitz: React Typescript Component](https://stackblitz.com/edit/react-starter-typescript-ohxvltnb?file=components%2FRichtextToHtml.tsx)
+- [Stackblitz: React Typescript Component](https://stackblitz.com/edit/react-starter-typescript-4dgcrdmq?file=components%2FRichtextToHtml.tsx)
