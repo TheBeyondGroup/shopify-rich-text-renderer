@@ -290,4 +290,4 @@ export default App
 **Live Examples**
 
 - [JSFiddle: Basic Use](https://jsfiddle.net/r2d4wsna/)
-- [Stackblitz: React Typescript Component](https://stackblitz.com/edit/react-starter-typescript-ohxvltnb?file=components%2FRichtextToHtml.tsx)
+- [Stackblitz: React Typescript Component](https://stackblitz.com/edit/react-starter-typescript-4dgcrdmq?file=components%2FRichtextToHtml.tsx)
